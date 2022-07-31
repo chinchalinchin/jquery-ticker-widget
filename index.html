@@ -10,6 +10,13 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">        
     </head>
     <style>
+        section{
+            margin-left: 2.5%;
+            display: none;
+        }
+        hr {
+            border-top: 3px solid #bbb;
+        }
         #search-toggle{
             cursor: pointer;
         }
@@ -36,8 +43,9 @@
             margin-left: 1%;
         }
         #latest-date{
-            font-style:italic;
+            color: grey;
             font-size: x-small;
+            margin-left: 2.5%;
         }
         .card{
             width: 50%;
@@ -45,23 +53,29 @@
         .positive{
             color: green;
         }
+        .panel-key{
+            color: grey;
+            font-size: small;
+            font-weight: bold;
+            margin-left: 2.5%;
+        }
         #invalid-errors, .negative{
             color: red;
-        }
-        hr.solid {
-            border-top: 3px solid #bbb;
         }
     </style>
     <body>
 
     <main>
-        <form id="search-form"
+        <form id="search-form" role="search"
             onsubmit="onSubmit(event)" onFocus="onFocus(event)">
             <div class="input-group mb-3">
               <input id="search-input" class="form-control" 
-                type="text" placeholder="Select a ticker">
+                type="text" placeholder="Symbol Lookup"
+                tabindex="0">
               <div id="search-toggle" class="input-group-append" 
-                onclick="onSubmit(event)" onfocus="onFocus(event)">
+                onclick="onSubmit(event)" onfocus="onFocus(event)"
+                role="button" tabindex="1"
+                aria-label="Search Button">
                 <span class="input-group-text">
                     <span class="material-icons">search</span>
                 </span>
@@ -69,10 +83,13 @@
             </div>
         </form>
 
+        <hr>
+
+
         <section id="ticker-card">
             <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
+                <div class="card-body" aria-live="polite">
+                    <div class="card-title" role="heading" aria-level="1">
                         <h1>
                             <span id="stock-name">STOCK NAME</span>  
                             (<span id="stock-ticker">STOCK TICKER </span>)
@@ -80,75 +97,80 @@
                     </div>
 
                     <div id="latest-panel">
-                        <div id="latest-prices">
-                            <h2 id="latest-price">LATEST PRICE</h2>
-                            <div id="latest-deltas">
-                                <div id="latest-change">LATEST CHANGE</div>
-                                <div id="latest-percent">
+                        <div id="latest-prices" role="heading" aria-level="2">
+                            <h2 id="latest-price" aria-label="Latest Price">LATEST PRICE</h2>
+                            <div id="latest-deltas" aria-label="Latest Changes" >
+                                <div id="latest-change" aria-label="Price Change">LATEST CHANGE</div>
+                                <div id="latest-percent" aria-label="Percent Change">
                                     (<span id="percent-span">LATEST PERCENT</span>)
-                                </div>
+                                </div> 
                             </div>
                         </div>
-                        <div id="latest-date">
+                        <div id="latest-date" aria-label="Latest Date" role="heading" aria-level="3">
                             As of
                             <span id="date-span">LATEST DATE</span>
+                            ET
                         </div>
                     </div>
 
-                    <div id="misc-panel">
-                        <hr class="solid">
-                        <div id="range-item" class="panel-item">
-                            <div id="range-key" class="panel-key">
-                                <strong>Range</strong>
+                    <div id="misc-panel" role="table">
+                        <hr>
+                        <div id="range-item" class="panel-item" role="row">
+                            <div id="range-key" class="panel-key" role="cell">
+                                Range
                             </div>
-                            <div>
-                                <small><i>
+                            <div role="cell">
+                                <small><strong>
                                     <span id="range-value" class="panel-value">RANGE</span>
-                                </i></small>
+                                </strong></small>
                             </div>
                         </div>
-                        <hr class="solid">
-                        <div id="open-item" class="panel-item">
-                            <div id="open-item" class="panel-key">
-                                <strong>Open</strong>
+
+                        <hr> 
+                        <div id="open-item" class="panel-item" role="row">
+                            <div id="open-item" class="panel-key" role="cell">
+                                Open
                             </div>
-                            <div>
-                                <small><i>
+                            <div role="cell">
+                                <small><strong>
                                     <span id="open-value" class="panel-value">OPEN</span>
-                                </i></small>
+                                </strong></small>
                             </div>
                         </div>
-                        <hr class="solid">
-                        <div id="volume-item" class="panel-item">
-                            <div id="volume-key" class="panel-key">
-                                <strong>Volume</strong>
+
+                        <hr>
+                        <div id="volume-item" class="panel-item" role="row">
+                            <div id="volume-key" class="panel-key" role="cell">
+                                Volume
                             </div>
-                            <div>
-                                <small><i>
+                            <div role="cell">
+                                <small><strong>
                                     <span id="volume-value" class="panel-value">VOLUME</span>
-                                </i></small>
+                                </strong></small>
                             </div>
                         </div>
-                        <hr class="solid">
-                        <div id="market-item" class="panel-item">
-                            <div id="market-key" class="panel-key">
-                                <strong>Market Cap</strong>
+
+                        <hr>
+                        <div id="market-item" class="panel-item" role="row">
+                            <div id="market-key" class="panel-key" role="cell">
+                                Market Cap
                             </div>
-                            <div>
-                                <small><i>
+                            <div role="cell">
+                                <small><strong>
                                     <span id="market-value" class="panel-value">MARKETCAP</span>
-                                </i></small>
+                                </strong></small>
                             </div>
                         </div>
-                        <hr class="solid">
+
+                        <hr>
                     </div>
                 </div>
             </div>
         </section>
 
-        <div id="invalid-errors">
+        <section id="invalid-errors" aria-live="polite">
             <span id="error-stock">STOCK</span> is <strong>not</strong> a valid symbol for this demo.
-        </div>
+        </section>
     </main>
 
     <script src="https://assets.codepen.io/4806287/quote.js"></script>
@@ -234,11 +256,12 @@
         }
 
         function roundVolume(vol){
-            return Math.round(vol/10000)/100 + "M"
+            return Math.round(vol/100000)/10 + "M"
         }
 
         function roundMarketCap(cap){
-            return Math.round(cap/100000000)/10 + "B"
+            let formattedCap = Math.round(cap/10000000)/100
+            return formattedCap % 1 == 0 ? formattedCap +".0B" : formattedCap + "B" 
         }
 
         function formatDate(date) {
@@ -258,6 +281,7 @@
         }
 
         function onSubmit(e){
+            e.preventDefault()
             $("#ticker-card").hide()
             $("#invalid-errors").hide()
             let user_input = $("#search-input").val().toUpperCase()
