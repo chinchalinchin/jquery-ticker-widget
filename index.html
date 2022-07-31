@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Ticker Widget</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">        
+    </head>
+    <style>
+        #search-toggle{
+            cursor: pointer;
+        }
+        #stock-panel{
+            display: flex;
+            flex-direction: column;
+        }
+        #latest-panel{
+            display: flex;
+            flex-direction: column;
+        }
+        #latest-prices, .panel-item{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        #latest-deltas{
+            font-weight: bold;
+            display: flex;
+            flex-direction: row;
+            justify-content: left;
+        }
+        #latest-percent{
+            margin-left: 1%;
+        }
+        #latest-date{
+            font-style:italic;
+            font-size: x-small;
+        }
+        .card{
+            width: 50%;
+        }
+        .positive{
+            color: green;
+        }
+        #invalid-errors, .negative{
+            color: red;
+        }
+        hr.solid {
+            border-top: 3px solid #bbb;
+        }
+    </style>
+    <body>
+
+    <main>
+        <form id="search-form"
+            onsubmit="onSubmit(event)" onFocus="onFocus(event)">
+            <div class="input-group mb-3">
+              <input id="search-input" class="form-control" 
+                type="text" placeholder="Select a ticker">
+              <div id="search-toggle" class="input-group-append" 
+                onclick="onSubmit(event)" onfocus="onFocus(event)">
+                <span class="input-group-text">
+                    <span class="material-icons">search</span>
+                </span>
+              </div>
+            </div>
+        </form>
+
+        <section id="ticker-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h1>
+                            <span id="stock-name">STOCK NAME</span>  
+                            (<span id="stock-ticker">STOCK TICKER </span>)
+                        </h1>
+                    </div>
+
+                    <div id="latest-panel">
+                        <div id="latest-prices">
+                            <h2 id="latest-price">LATEST PRICE</h2>
+                            <div id="latest-deltas">
+                                <div id="latest-change">LATEST CHANGE</div>
+                                <div id="latest-percent">
+                                    (<span id="percent-span">LATEST PERCENT</span>)
+                                </div>
+                            </div>
+                        </div>
+                        <div id="latest-date">
+                            As of
+                            <span id="date-span">LATEST DATE</span>
+                        </div>
+                    </div>
+
+                    <div id="misc-panel">
+                        <hr class="solid">
+                        <div id="range-item" class="panel-item">
+                            <div id="range-key" class="panel-key">
+                                <strong>Range</strong>
+                            </div>
+                            <div>
+                                <small><i>
+                                    <span id="range-value" class="panel-value">RANGE</span>
+                                </i></small>
+                            </div>
+                        </div>
+                        <hr class="solid">
+                        <div id="open-item" class="panel-item">
+                            <div id="open-item" class="panel-key">
+                                <strong>Open</strong>
+                            </div>
+                            <div>
+                                <small><i>
+                                    <span id="open-value" class="panel-value">OPEN</span>
+                                </i></small>
+                            </div>
+                        </div>
+                        <hr class="solid">
+                        <div id="volume-item" class="panel-item">
+                            <div id="volume-key" class="panel-key">
+                                <strong>Volume</strong>
+                            </div>
+                            <div>
+                                <small><i>
+                                    <span id="volume-value" class="panel-value">VOLUME</span>
+                                </i></small>
+                            </div>
+                        </div>
+                        <hr class="solid">
+                        <div id="market-item" class="panel-item">
+                            <div id="market-key" class="panel-key">
+                                <strong>Market Cap</strong>
+                            </div>
+                            <div>
+                                <small><i>
+                                    <span id="market-value" class="panel-value">MARKETCAP</span>
+                                </i></small>
+                            </div>
+                        </div>
+                        <hr class="solid">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="invalid-errors">
+            <span id="error-stock">STOCK</span> is <strong>not</strong> a valid symbol for this demo.
+        </div>
+    </main>
+
+    <script src="https://assets.codepen.io/4806287/quote.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
+
+    <script>
+        let VALID_TICKERS = [
+            {
+                symbol: 'MSFT',
+                name: 'Microsoft'
+            },
+            {
+                symbol: 'AAPL',
+                name: 'Apple'
+            },
+            {
+                symbol: 'INFO',
+                name: 'IHS Market'
+            },
+            {
+                symbol: 'BRK.A',
+                name: 'Berkshire Hathaway'
+            },
+            {
+                symbol: 'F',
+                name: 'Ford Motors'
+            },
+            {
+                symbol: 'PLT',
+                name: 'Planetel SPA'
+            },
+            {
+                symbol: 'BIG',
+                name: 'Big Lots'
+            },
+            {
+                symbol: 'TWX',
+                name: 'Time Warner'
+            },
+            {
+                symbol: 'AME',
+                name: 'AMETEK'
+            },
+            {
+                symbol: 'JWN',
+                name: 'Nordstrom'
+            },
+            {
+                symbol: 'CVS',
+                name: 'CVS Health'
+            },
+            {
+                symbol: 'MS',
+                name: 'Morgan Stanley'
+            },
+            {
+                symbol: 'MET',
+                name: 'Metlife'
+            },
+        ];
+
+        function getValidTickers(){
+            return VALID_TICKERS.map((val) => val.symbol)
+        };
+
+        function getTickerName(symbol){
+            return VALID_TICKERS.filter((val) => val.symbol == symbol).pop().name
+        }
+
+        function padDigits(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        function roundNumber(price){
+            return Math.round(price * 100) / 100
+        }
+
+        function roundPercent(percent){
+            return Math.round(percent*10000)/10000 + "%"
+        }
+
+        function roundVolume(vol){
+            return Math.round(vol/10000)/100 + "M"
+        }
+
+        function roundMarketCap(cap){
+            return Math.round(cap/100000000)/10 + "B"
+        }
+
+        function formatDate(date) {
+            return (
+                [
+                date.getFullYear(),
+                padDigits(date.getMonth() + 1),
+                padDigits(date.getDate()),
+                ].join('-') +
+                ' ' +
+                [
+                padDigits(date.getHours()),
+                padDigits(date.getMinutes()),
+                padDigits(date.getSeconds()),
+                ].join(':')
+            );
+        }
+
+        function onSubmit(e){
+            $("#ticker-card").hide()
+            $("#invalid-errors").hide()
+            let user_input = $("#search-input").val().toUpperCase()
+            if(getValidTickers().includes(user_input)){
+                getQuote(user_input).then((res)=>{
+                    console.log(res.data)
+                    let range = res.data.High + " - " +res.data.Low
+                    let open = res.data.Open
+                    let vol = roundVolume(res.data.Volume)
+                    let cap = roundMarketCap(res.data.MarketCap)
+                    let price = res.data.LastPrice
+                    let change = roundNumber(res.data.Change)
+                    let percent = roundPercent(res.data.ChangePercent)
+                    let date = formatDate(res.data.Timestamp)
+
+                    $("#stock-ticker").html(user_input)
+                    $("#stock-name").html(getTickerName(user_input))
+                    $("#range-value").html(range)
+                    $("#volume-value").html(vol)
+                    $("#open-value").html(open)
+                    $("#latest-price").html(price)
+                    $("#latest-change").html(change)
+                    $("#percent-span").html(percent)
+                    $("#date-span").html(date)
+                    $("#market-value").html(cap)
+
+                    if(res.data.Change>0){
+                        $("#latest-deltas").addClass("positive")
+                    }
+                    else{
+                        $("#latest-deltas").addClass("negative")
+                    }
+                    $("#ticker-card").show()
+                    
+                })
+            }
+            else{
+                $("#error-stock").html(user_input)
+                $("#invalid-errors").show()
+            }
+        }
+
+        function onFocus(e){
+            $("#ticker-card").hide()
+            $("#invalid-errors").hide()
+        }
+
+        $(document).ready(function(){
+            $("#ticker-card").hide()
+            $("#invalid-errors").hide()
+            
+        });
+    </script>
+    </body>
+</html>
